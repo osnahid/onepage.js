@@ -38,28 +38,11 @@ jQuery(document).ready(function()
     /* a listener when scrolling to fix the tha category section */
     jQuery(window).scroll(function(){
         var container_top = jQuery('#moo_OnlineStoreContainer').offset().top;
-        
         if (jQuery(window).scrollTop() > (container_top-header_height))
         {
             //console.log(navigator.userAgent);
-            if( jQuery(window).width() <= 768 ) {
-                if(!jQuery(".moo-stick-to-content").hasClass('moo-fixed')){
-                jQuery(".moo-stick-to-content").addClass('moo-fixed').width('100%').css("top",window.height+'px');
-                mooExpColCatMenu();
-                jQuery(".moo-stick-to-content").attr('onclick', 'mooExpColCatMenu();');
-                }
-                links = jQuery('ul.moo-nav li a');
-                links.each(
-                    function () { 
-                       var currentTop = jQuery(window).scrollTop();
-                       var page = jQuery(this).attr('href');
-                       var elemTop 	= jQuery(page).offset().top;
-                        var elemBottom 	= elemTop + jQuery(page).height();
-                        if((currentTop >= elemTop) &&(currentTop <= elemBottom))
-                       jQuery('.moo-choose-category').html(jQuery(jQuery(this).attr('href')).find('.moo-title').text()+'<i class="fas fa-chevron-down" aria-hidden="true"></i>');
-                     }
-                );
-                
+            if( window.innerWidth < 768 ) {
+                jQuery(".moo-stick-to-content").addClass('moo-fixed').width('100%').css("top",window.height+'px')
             }
             else
             {
@@ -70,36 +53,10 @@ jQuery(document).ready(function()
         else
         {
             jQuery(".moo-stick-to-content").removeClass('moo-fixed');
-            jQuery(".moo-stick-to-content").removeAttr('onclick');
-            jQuery('.moo-choose-category').html('Choose a Categorie<i class="fas fa-chevron-down" aria-hidden="true"></i>');
-            if(jQuery('.moo-nav').css('display') === 'none') mooExpColCatMenu();
         }
     });
 
 });
-
-
-jQuery(window).resize(function() {
-    if( jQuery(window).width() <= 768 ) {
-        
-    }else{
-
-    }
-
-});
-function mooExpColCatMenu() {
-    jQuery(".moo-nav").animate({
-        height: 'toggle'
-      });
-     if(jQuery('.moo-choose-category').find('i').hasClass('fa-chevron-down')){
-        jQuery('.moo-choose-category').find('i').removeClass('fa-chevron-down');
-        jQuery('.moo-choose-category').find('i').addClass('fa-times');
-     }else{
-        jQuery('.moo-choose-category').find('i').removeClass('fa-times');
-        jQuery('.moo-choose-category').find('i').addClass('fa-chevron-down');
-     }
-      
-}
 function MooLoadBaseStructure(elm_id,callback) {
     var html = '<div class="moo-row">'+
         '<div  class="moo-is-sticky moo-new-icon" onclick="mooShowCart(event)">' +
@@ -136,7 +93,7 @@ function MooCLickOnCategory(event,elm)
     event.preventDefault();
     var page = jQuery(elm).attr('href');
     var speed = 750;
-    jQuery('html, body').animate( { scrollTop: jQuery(page).offset().top+2 }, speed ); // Go
+    jQuery('html, body').animate( { scrollTop: jQuery(page).offset().top }, speed ); // Go
     return false;
 }
 
@@ -173,7 +130,7 @@ function moo_renderCategories($cats,withButton)
 {
     var element = document.getElementById("moo-onlineStore-categories");
     var html     = '<nav id="moo-menu-navigation" class="moo-stick-to-content">';
-        html     += '<div class="moo-choose-category">Choose a Category <i class="fas fa-times" aria-hidden="true"></i></div>';
+        html     += '<div class="moo-choose-category">Choose a Category</div>';
         html     += '<ul class="moo-nav moo-nav-menu moo-bg-dark moo-dark">';
 
     for(i in $cats){
@@ -518,7 +475,7 @@ function moo_clickOnOrderBtn(event,item_id,qty)
             text:"Check your internet connection or contact us",
             type:"error"
         });
-        
+        console.log(data);
     }).done(function ( data ) {
         if(typeof data.nb_items != "undefined")
             jQuery("#moo-cartNbItems").text(data.nb_items)
